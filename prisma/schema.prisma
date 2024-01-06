@@ -8,81 +8,60 @@ datasource db {
 }
 
 model Profile {
-  // id
-  id    String @id @default(uuid())
-  clerk String @unique
-
-  // metadata
-  username String  @unique
-  aboutme  String?
-  views    Int     @default(0)
-
-  // identifiers
+  id              String    @id @default(uuid())
+  clerk           String    @unique
+  username        String    @unique
+  aboutme         String?
+  views           Int       @default(0)
   linkvertise_api String?
   workink_api     String?
-
-  projects Project[]
+  projects        Project[]
 }
 
 model Project {
-  // id
-  id String @id @default(uuid())
-
-  // metadata
-  title         String
-  description   String
-  active        Boolean  @default(true)
-  verified      Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  views         Int      @default(0)
-  block_adblock Boolean  @default(false)
-
+  id                  String      @id @default(uuid())
+  title               String
+  description         String
+  active              Boolean     @default(true)
+  verified            Boolean     @default(false)
+  createdAt           DateTime    @default(now())
+  views               Int         @default(0)
+  block_adblock       Boolean     @default(false)
   monetization_method String
-
-  image_url   String?
-  youtube_url String?
-
-  // identifiers
-
-  Profile      Profile? @relation(fields: [profileClerk], references: [clerk])
-  profileClerk String?
-
-  visits UserVisit[]
-  logs   Log[]
-
-  allowFreeLicenses Boolean   @default(true)
-  licenses          License[]
+  image_url           String?
+  youtube_url         String?
+  profileClerk        String?
+  allowFreeLicenses   Boolean     @default(true)
+  licenses            License[]
+  logs                Log[]
+  Profile             Profile?    @relation(fields: [profileClerk], references: [clerk])
+  visits              UserVisit[]
 }
 
 model Log {
-  id   Int      @id @default(autoincrement())
-  date DateTime @default(now()) @db.Date
-
-  views       Int @default(0)
-  validations Int @default(0)
-  skips       Int @default(0)
-
-  Project   Project? @relation(fields: [projectId], references: [id])
-  projectId String?
+  id          Int      @id @default(autoincrement())
+  date        DateTime @default(now()) @db.Date
+  views       Int      @default(0)
+  validations Int      @default(0)
+  skips       Int      @default(0)
+  projectId   String?
+  Project     Project? @relation(fields: [projectId], references: [id])
 }
 
 model UserVisit {
-  id Int @id @default(autoincrement())
-
+  id           Int      @id @default(autoincrement())
   ip           String
   date         DateTime @default(now())
   country_code String
-
-  Project   Project? @relation(fields: [projectId], references: [id])
-  projectId String?
+  projectId    String?
+  Project      Project? @relation(fields: [projectId], references: [id])
 }
 
 model License {
-  id     String   @id @default(uuid())
-  auth   String   @default("Not claimed")
-  expire DateTime @default(now())
-  free   Boolean  @default(false)
-
-  Project   Project? @relation(fields: [projectId], references: [id])
+  id        String   @id @default(uuid())
+  auth      String   @default("Not claimed")
+  expire    DateTime @default(now())
+  free      Boolean  @default(false)
   projectId String?
+  Project   Project? @relation(fields: [projectId], references: [id])
 }
