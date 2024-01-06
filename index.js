@@ -36,19 +36,37 @@ App.get("/authenticate", async (req, res) => {
 
   const IPAuth = SHA256(ip)
 
-  if (Response.auth === IPAuth) {
+  if(Response.auth === "Not claimed") {
+    console.log("Auth is not claimed")
+    await prisma.license.update({
+      where: {
+        id: Key
+      },
+      data: {
+        auth: IPAuth
+      }
+    })
+
+    console.log("Auth successful")
+
     return res.send({
       success: true,
       free: Response.free,
       validator: SHA256(Seed)
     })
-  } else {
-    console.log(Response.auth)
-    console.log(IPAuth)
+  }
+
+  if (Response.auth === IPAuth) {
+    console.log("Auth successful")
+    return res.send({
+      success: true,
+      free: Response.free,
+      validator: SHA256(Seed)
+    })
   }
   
-
-  return res.send("Hello world!")
+  console.log("Auth unsuccessful")
+  return res.send("Unexpected return.")
 })
 
 const PORT = process.env.PORT || 3000
