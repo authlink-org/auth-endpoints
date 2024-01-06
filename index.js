@@ -42,6 +42,9 @@ App.get("/authenticate", async (req, res) => {
       free: Response.free,
       validator: SHA256(Seed)
     })
+  } else {
+    console.log(Response.auth)
+    console.log(IPAuth)
   }
   
 
