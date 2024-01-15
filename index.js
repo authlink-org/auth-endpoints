@@ -10,7 +10,7 @@ const {createHash} = require('crypto')
 const SHA256 = (MSG) => createHash("sha256").update(MSG).digest("hex")
 
 App.get("/version", (req, res) => {
-  return res.send("v1")
+  return res.send("v1.1")
 })
 
 async function UpdateMetadata(License, Metadata) {
