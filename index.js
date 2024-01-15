@@ -65,7 +65,7 @@ App.get("/authenticate", async (req, res) => {
 
     console.log("Auth successful")
 
-    UpdateMetadata(License, d)
+    UpdateMetadata(Key, d)
     return res.send({
       success: true,
       free: Response.free,
@@ -76,7 +76,7 @@ App.get("/authenticate", async (req, res) => {
   if (Response.auth === IPAuth) {
     console.log("Auth successful")
 
-    UpdateMetadata(License, d)
+    UpdateMetadata(Key, d)
     return res.send({
       success: true,
       free: Response.free,
