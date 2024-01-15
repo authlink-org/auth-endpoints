@@ -13,8 +13,24 @@ App.get("/version", (req, res) => {
   return res.send("v1")
 })
 
+async function UpdateMetadata(License, Metadata) {
+  if(Metadata) {
+    const Data = new Buffer(Metadata, "base64")
+    const Readable = Data.toString("ascii")
+
+    await prisma.license.update({
+      where: {
+        id: License
+      },
+      data: {
+        metadata: Readable
+      }
+    })
+  }
+}
+
 App.get("/authenticate", async (req, res) => {
-  const {a, b, c} = req.query
+  const {a, b, c, d} = req.query
   if(!a) return res.send("Missing [a] query")
   if(!b) return res.send("Missing [b] query")
   if(!c) return res.send("Missing [c] query")
@@ -49,6 +65,7 @@ App.get("/authenticate", async (req, res) => {
 
     console.log("Auth successful")
 
+    UpdateMetadata(License, d)
     return res.send({
       success: true,
       free: Response.free,
@@ -58,6 +75,8 @@ App.get("/authenticate", async (req, res) => {
 
   if (Response.auth === IPAuth) {
     console.log("Auth successful")
+
+    UpdateMetadata(License, d)
     return res.send({
       success: true,
       free: Response.free,
